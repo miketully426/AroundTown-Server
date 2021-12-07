@@ -1,8 +1,12 @@
 package com.launchcode.AroundTownServer.models;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.Objects;
 
 //import javax.validation.constraints.NotNull;
 
+@Entity
 public class Event {
 
 //    @NotNull(message = "Name is required to be inputted!")
@@ -12,8 +16,12 @@ public class Event {
 
     public String location;
 
+    @Id
+    @GeneratedValue
+    public int eventId;
 
-    public Event(String name, String description, String location) {
+
+    public Event(String name, String description, String location, int eventId) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -41,6 +49,10 @@ public class Event {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public int getEventId() {
+        return eventId;
     }
 
     @Override
