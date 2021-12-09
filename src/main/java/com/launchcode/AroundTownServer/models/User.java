@@ -22,22 +22,25 @@ public class User {
     @GeneratedValue
     private int id;
 
-    @NotNull
-    @Size(max=100)
+   // @NotNull
+    //@Size(max=100)
     private String name;
 
-    @NotNull
+    //@NotNull
     private String username;
 
-    @NotNull
+    private String email;
+
+    //@NotNull
     private String pwHash;
 
     public User() {}
 
-    public User(int id, String name, String username, String password) {
+    public User(int id, String name, String username, String email,String password) {
         this.id = id;
         this.name = name;
         this.username = username;
+        this.email = email;
         this.pwHash = encoder.encode(password);
     }
 
@@ -65,4 +68,11 @@ public class User {
         return encoder.matches(password, pwHash);
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
