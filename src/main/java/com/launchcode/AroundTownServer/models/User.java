@@ -9,9 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 
+import javax.persistence.Table;
 import javax.swing.*;
 
 @Entity
+@Table(name = "user")
 public class User {
 
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
