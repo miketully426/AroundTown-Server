@@ -1,15 +1,15 @@
 package com.launchcode.AroundTownServer.models;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Objects;
+
 
 //import javax.validation.constraints.NotNull;
 
 @Entity
 public class Event {
 
-//    @NotNull(message = "Name is required to be inputted!")
     public String name;
 
     public String description;
@@ -25,6 +25,9 @@ public class Event {
         this.name = name;
         this.description = description;
         this.location = location;
+    }
+
+    public Event() {
     }
 
     public String getName() {
