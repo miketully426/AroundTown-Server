@@ -8,32 +8,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api")
+@ResponseBody
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    @GetMapping("/user")
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    @GetMapping("/users")
+    public List<User> getAllUsers() {
+        return (List<User>) userRepository.findAll();
     }
 
-    @GetMapping("/user/{id}")
-    public User getUser(@PathVariable("id") int id) {
-        return userRepository.findById(id).get();
-    }
-
-    @PostMapping("/user")
-    public void addUser(@RequestBody User user) {
+    @PostMapping("/users")
+    void addUser(@RequestBody User user) {
         userRepository.save(user);
     }
-
 }
