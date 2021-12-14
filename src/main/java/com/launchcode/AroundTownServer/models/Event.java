@@ -1,15 +1,94 @@
+//package com.launchcode.AroundTownServer.models;
+//
+//import javax.persistence.Entity;
+//import javax.persistence.GeneratedValue;
+//import javax.persistence.Id;
+//import javax.persistence.Table;
+//import java.util.Objects;
+//
+////import javax.validation.constraints.NotNull;
+//
+//@Entity
+//@Table(name="event")
+//public class Event {
+//
+////    @NotNull(message = "Name is required to be inputted!")
+//    public String name;
+//
+//    public String description;
+//
+//    public String location;
+//
+//    @Id
+//    @GeneratedValue
+//    public int eventId;
+//
+//    public Event(){}
+//
+//    public Event(String name, String description, String location) {
+//        this.name = name;
+//        this.description = description;
+//        this.location = location;
+//    }
+//
+//    public String getName() {
+//        return name;
+//    }
+//
+//    public void setName(String name) {
+//        this.name = name;
+//    }
+//
+//    public String getDescription() {
+//        return description;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
+//
+//    public String getLocation() {
+//        return location;
+//    }
+//
+//    public void setLocation(String location) {
+//        this.location = location;
+//    }
+//
+//    public int getEventId() {
+//        return eventId;
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return name;
+//    }
+//
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        Event event = (Event) o;
+//        return eventId == event.eventId;
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(eventId);
+//    }
+//}
 package com.launchcode.AroundTownServer.models;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.util.Objects;
+
 
 //import javax.validation.constraints.NotNull;
 
 @Entity
 public class Event {
 
-//    @NotNull(message = "Name is required to be inputted!")
     public String name;
 
     public String description;
@@ -25,6 +104,9 @@ public class Event {
         this.name = name;
         this.description = description;
         this.location = location;
+    }
+
+    public Event() {
     }
 
     public String getName() {
