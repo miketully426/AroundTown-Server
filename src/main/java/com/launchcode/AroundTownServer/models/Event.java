@@ -1,15 +1,17 @@
 package com.launchcode.AroundTownServer.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.*;
+import javax.persistence.*;
 import java.util.Objects;
 
-
-//import javax.validation.constraints.NotNull;
-
+@Getter @Setter @NoArgsConstructor
 @Entity
 public class Event {
+
+    @Id
+    @GeneratedValue
+    @Setter(AccessLevel.NONE)
+    private int eventId;
 
     private String name;
 
@@ -25,11 +27,6 @@ public class Event {
 
     private boolean familyFriendly;
 
-    @Id
-    @GeneratedValue
-    public int eventId;
-
-
     public Event(String name, String description, String location, String date, String time, String entryCost, boolean familyFriendly) {
         this.name = name;
         this.description = description;
@@ -38,74 +35,6 @@ public class Event {
         this.time = time;
         this.entryCost = entryCost;
         this.familyFriendly = familyFriendly;
-    }
-
-    public Event() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public int getEventId() {
-        return eventId;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getEntryCost() {
-        return entryCost;
-    }
-
-    public void setEntryCost(String entryCost) {
-        this.entryCost = entryCost;
-    }
-
-    public boolean isFamilyFriendly() {
-        return familyFriendly;
-    }
-
-    public void setFamilyFriendly(boolean familyFriendly) {
-        this.familyFriendly = familyFriendly;
-    }
-
-    @Override
-    public String toString() {
-        return name;
     }
 
     @Override
@@ -120,4 +49,5 @@ public class Event {
     public int hashCode() {
         return Objects.hash(eventId);
     }
+
 }
