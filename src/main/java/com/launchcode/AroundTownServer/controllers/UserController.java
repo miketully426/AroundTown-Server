@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,4 +33,13 @@ public class UserController {
     void addUser(@RequestBody User user) {
         userRepository.save(user);
     }
+
+
+//    just thinking ahead about logout functionality for the user profile
+//    @GetMapping("/logout")
+//    public String logout(HttpServletRequest request){
+//        request.getSession().invalidate();
+//        return "redirect:/''";
+//    }
+
 }
