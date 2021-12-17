@@ -67,9 +67,9 @@ public class EventController {
         eventRepository.save(event);
     }
 
-    @GetMapping("/eventid")
-        Event getEventById(@RequestBody Event event) {
-            return eventRepository.findById(event.eventId).get();
+    @GetMapping("/event/{id}")
+        Event getEventById(@PathVariable Integer id) throws Exception {
+            return eventRepository.findById(id).orElseThrow(() -> new Exception());
         }
 
 }
