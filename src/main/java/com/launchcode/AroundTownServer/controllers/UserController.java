@@ -35,16 +35,9 @@ public class UserController {
         userRepository.save(user);
     }
 
-    @GetMapping("/userprofile/{id}")
+    @GetMapping("/users/{id}")
     public Optional<User> getUserById(@PathVariable("id") int id) {
         return userRepository.findById(id);
     }
-
-//    just thinking ahead about logout functionality for the user profile
-//    @GetMapping("/logout")
-//    public String logout(HttpServletRequest request){
-//        request.getSession().invalidate();
-//        return "redirect:/''";
-//    }
 
 }
