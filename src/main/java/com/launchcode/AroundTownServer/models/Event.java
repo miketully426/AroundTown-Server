@@ -95,7 +95,7 @@ public class Event {
         this.entryCost = entryCost;
     }
 
-    public boolean isFamilyFriendly() {
+    public boolean getFamilyFriendly() {
         return familyFriendly;
     }
 
