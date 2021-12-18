@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -34,6 +35,10 @@ public class UserController {
         userRepository.save(user);
     }
 
+    @GetMapping("/userprofile/{id}")
+    public Optional<User> getUserById(@PathVariable("id") int id) {
+        return userRepository.findById(id);
+    }
 
 //    just thinking ahead about logout functionality for the user profile
 //    @GetMapping("/logout")
