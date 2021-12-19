@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
-public class BasicAuthController {
+public class AuthenticationController {
 
     @GetMapping(path = "/login")
     public AuthenticationBean basicauth() {
