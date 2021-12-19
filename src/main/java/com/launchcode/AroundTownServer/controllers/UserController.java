@@ -34,7 +34,7 @@ public class UserController {
     void addUser(@RequestBody User user) {
         userRepository.save(user);
     }
-   // @CrossOrigin("/userProfile/{id}")
+  
     @GetMapping("/users/{id}")
     public Optional<User> getUserById(@PathVariable("id") int id) {
         return userRepository.findById(id);
