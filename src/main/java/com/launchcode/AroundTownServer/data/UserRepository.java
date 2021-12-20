@@ -1,9 +1,10 @@
 package com.launchcode.AroundTownServer.data;
 
-import com.launchcode.AroundTownServer.models.Event;
+import com.launchcode.AroundTownServer.models.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EventRepository extends CrudRepository<Event, Integer> {
+public interface UserRepository extends CrudRepository<User, Integer> {
+    User findByUsername(String username);
 }

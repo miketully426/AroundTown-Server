@@ -1,91 +1,14 @@
-//package com.launchcode.AroundTownServer.models;
-//
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.Id;
-//import javax.persistence.Table;
-//import java.util.Objects;
-//
-////import javax.validation.constraints.NotNull;
-//
-//@Entity
-//@Table(name="event")
-//public class Event {
-//
-////    @NotNull(message = "Name is required to be inputted!")
-//    public String name;
-//
-//    public String description;
-//
-//    public String location;
-//
-//    @Id
-//    @GeneratedValue
-//    public int eventId;
-//
-//    public Event(){}
-//
-//    public Event(String name, String description, String location) {
-//        this.name = name;
-//        this.description = description;
-//        this.location = location;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public String getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(String location) {
-//        this.location = location;
-//    }
-//
-//    public int getEventId() {
-//        return eventId;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return name;
-//    }
-//
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Event event = (Event) o;
-//        return eventId == event.eventId;
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(eventId);
-//    }
-//}
 package com.launchcode.AroundTownServer.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import lombok.*;
+import javax.persistence.*;
+import java.util.Objects;
 
 
-//import javax.validation.constraints.NotNull;
-
+@Getter @Setter @NoArgsConstructor
 @Entity
 public class Event {
 
@@ -97,48 +20,43 @@ public class Event {
 
     @Id
     @GeneratedValue
-    public int eventId;
+    @Setter(AccessLevel.NONE)
+    private int eventId;
 
+    private String name;
 
-    public Event(String name, String description, String location, int eventId) {
+    private String description;
+
+    private String location;
+
+    private String date;
+
+    private String time;
+
+    private String entryCost;
+
+    private boolean familyFriendly;
+
+    public Event(String name, String description, String location, String date, String time, String entryCost, boolean familyFriendly) {
         this.name = name;
         this.description = description;
         this.location = location;
-    }
-
-    public Event() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public int getEventId() {
-        return eventId;
+        this.date = date;
+        this.time = time;
+        this.entryCost = entryCost;
+        this.familyFriendly = familyFriendly;
     }
 
     @Override
-    public String toString() {
-        return name;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Event)) return false;
+        Event event = (Event) o;
+        return eventId == event.eventId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventId);
     }
 }
