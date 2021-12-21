@@ -12,12 +12,6 @@ import java.util.Objects;
 @Entity
 public class Event {
 
-    public String name;
-
-    public String description;
-
-    public String location;
-
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
