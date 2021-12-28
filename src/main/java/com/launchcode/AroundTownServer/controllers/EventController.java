@@ -57,13 +57,12 @@ public class EventController {
             eventData.setEntryCost((updatedEvent.getEntryCost()));
             eventData.setFamilyFriendly(updatedEvent.getFamilyFriendly());
             System.out.println("success");
-            System.out.println(eventData);
             return new ResponseEntity<>(eventRepository.save(eventData), HttpStatus.OK);
 
         } else {
             System.out.println("failure");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
+        //do i still need to print success and failure?
     }
 }
