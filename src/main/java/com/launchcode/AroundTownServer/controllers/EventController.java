@@ -39,9 +39,11 @@ public class EventController {
 //        return eventRepository.findById(eventId);
 //    }
 
-    @GetMapping("/event/{eventId}")
-    Event getEventById(@PathVariable Integer eventId) throws Exception {
-        return eventRepository.findById(eventId).orElseThrow(() -> new Exception());
+    @GetMapping("/events/{eventId}")
+    public Optional<Event> getEventById(@PathVariable int eventId) {
+        return eventRepository.findById(eventId);
     }
+
+    //can we have @GetMapping in here for multiple functions
 }
 
