@@ -11,11 +11,11 @@ import java.util.Objects;
 @Entity
 public class Event {
 
-    public String name;
+    private String name;
 
-    public String description;
+    private String description;
 
-    public String location;
+    private String location;
 
     private String date;
 
@@ -27,7 +27,7 @@ public class Event {
 
     @Id
     @GeneratedValue
-    public int eventId;
+    private int eventId;
 
 
     public Event(String name, String description, String location, String date, String time, String entryCost, boolean familyFriendly) {
