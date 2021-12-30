@@ -18,7 +18,7 @@ public class EventController {
     @Autowired
     private final EventRepository eventRepository;
 
-    public EventController (EventRepository eventRepository) {
+    public EventController(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 
@@ -32,18 +32,84 @@ public class EventController {
         eventRepository.save(event);
     }
 
-    @GetMapping("/events/{searchTerm}")
-    public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm) {
-        Iterable<Event> allEvents = this.eventRepository.findAll();
+    @GetMapping("/events/{filter}")
+    public List<Event> filterAllEvents(@PathVariable("filter") String filter) {
+        List<Event> allEvents = getAllEvents();
         List<Event> matchingEvents = new ArrayList<>();
-        for(Event event : allEvents) {
-            if (event.getName().toLowerCase().contains(searchTerm)
-                || event.getDescription().toLowerCase().contains(searchTerm)
-                || event.getLocation().toLowerCase().contains(searchTerm)) {
-                matchingEvents.add(event);
+
+        if(filter.equalsIgnoreCase("none")) {
+            matchingEvents = allEvents;
+        }
+        if(filter.equalsIgnoreCase("familyFriendly")) {
+            for(Event event : allEvents) {
+                if(event.isFamilyFriendly()) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        if(filter.equalsIgnoreCase("notFamilyFriendly")) {
+            for(Event event : allEvents) {
+                if(!event.isFamilyFriendly()) {
+                    matchingEvents.add(event);
+                }
             }
         }
         return matchingEvents;
     }
 
+    @GetMapping("/events/{searchTerm}/{filter}")
+    public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm, @PathVariable("filter") String filter) {
+        Iterable<Event> allEvents = this.eventRepository.findAll();
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if (filter.equalsIgnoreCase("none")) {
+            if (!searchTerm.isEmpty()) {
+                for (Event event : allEvents) {
+                    if (event.getName().toLowerCase().contains(searchTerm)
+                            || event.getDescription().toLowerCase().contains(searchTerm)
+                            || event.getLocation().toLowerCase().contains(searchTerm)) {
+                        matchingEvents.add(event);
+                    }
+                }
+            } else if (searchTerm.isEmpty()) {
+                matchingEvents = getAllEvents();
+            }
+        }
+        if (filter.equalsIgnoreCase("familyFriendly")) {
+            if (!searchTerm.isEmpty()) {
+                for (Event event : allEvents) {
+                    if ((event.getName().toLowerCase().contains(searchTerm)
+                            || event.getDescription().toLowerCase().contains(searchTerm)
+                            || event.getLocation().toLowerCase().contains(searchTerm)) && event.isFamilyFriendly()) {
+                        matchingEvents.add(event);
+                    }
+                }
+            } else if (searchTerm.isEmpty()) {
+                for (Event event : allEvents) {
+                    if (event.isFamilyFriendly()) {
+                        matchingEvents.add(event);
+                    }
+                }
+            }
+        }
+        if (filter.equalsIgnoreCase("notFamilyFriendly")) {
+            if (!searchTerm.isEmpty()) {
+                for (Event event : allEvents) {
+                    if ((event.getName().toLowerCase().contains(searchTerm)
+                            || event.getDescription().toLowerCase().contains(searchTerm)
+                            || event.getLocation().toLowerCase().contains(searchTerm)) && !event.isFamilyFriendly()) {
+                        matchingEvents.add(event);
+                    }
+                }
+            } else if (searchTerm.isEmpty()) {
+                for (Event event : allEvents) {
+                    if (!event.isFamilyFriendly()) {
+                        matchingEvents.add(event);
+                    }
+                }
+            }
+        }
+        return matchingEvents;
+
+    }
 }
