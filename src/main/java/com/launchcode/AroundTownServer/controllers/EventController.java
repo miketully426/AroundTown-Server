@@ -29,6 +29,7 @@ public class EventController {
 
     @PostMapping("/events")
     void addEvent(@RequestBody Event event) {
+        System.out.println(event.getEntryCost());
         eventRepository.save(event);
     }
 
@@ -63,7 +64,6 @@ public class EventController {
         List<Event> matchingEvents = new ArrayList<>();
 
         if (filter.equalsIgnoreCase("none")) {
-            if (!searchTerm.isEmpty()) {
                 for (Event event : allEvents) {
                     if (event.getName().toLowerCase().contains(searchTerm)
                             || event.getDescription().toLowerCase().contains(searchTerm)
@@ -71,12 +71,8 @@ public class EventController {
                         matchingEvents.add(event);
                     }
                 }
-            } else if (searchTerm.isEmpty()) {
-                matchingEvents = getAllEvents();
-            }
         }
         if (filter.equalsIgnoreCase("familyFriendly")) {
-            if (!searchTerm.isEmpty()) {
                 for (Event event : allEvents) {
                     if ((event.getName().toLowerCase().contains(searchTerm)
                             || event.getDescription().toLowerCase().contains(searchTerm)
@@ -84,16 +80,8 @@ public class EventController {
                         matchingEvents.add(event);
                     }
                 }
-            } else if (searchTerm.isEmpty()) {
-                for (Event event : allEvents) {
-                    if (event.isFamilyFriendly()) {
-                        matchingEvents.add(event);
-                    }
-                }
-            }
         }
         if (filter.equalsIgnoreCase("notFamilyFriendly")) {
-            if (!searchTerm.isEmpty()) {
                 for (Event event : allEvents) {
                     if ((event.getName().toLowerCase().contains(searchTerm)
                             || event.getDescription().toLowerCase().contains(searchTerm)
@@ -101,15 +89,8 @@ public class EventController {
                         matchingEvents.add(event);
                     }
                 }
-            } else if (searchTerm.isEmpty()) {
-                for (Event event : allEvents) {
-                    if (!event.isFamilyFriendly()) {
-                        matchingEvents.add(event);
-                    }
-                }
-            }
+
         }
         return matchingEvents;
-
     }
 }
