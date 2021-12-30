@@ -66,8 +66,7 @@ public class EventController {
         if (filter.equalsIgnoreCase("none")) {
                 for (Event event : allEvents) {
                     if (event.getName().toLowerCase().contains(searchTerm)
-                            || event.getDescription().toLowerCase().contains(searchTerm)
-                            || event.getLocation().toLowerCase().contains(searchTerm)) {
+                            || event.getDescription().toLowerCase().contains(searchTerm)) {
                         matchingEvents.add(event);
                     }
                 }
@@ -75,8 +74,7 @@ public class EventController {
         if (filter.equalsIgnoreCase("familyFriendly")) {
                 for (Event event : allEvents) {
                     if ((event.getName().toLowerCase().contains(searchTerm)
-                            || event.getDescription().toLowerCase().contains(searchTerm)
-                            || event.getLocation().toLowerCase().contains(searchTerm)) && event.isFamilyFriendly()) {
+                            || event.getDescription().toLowerCase().contains(searchTerm)) && event.isFamilyFriendly()) {
                         matchingEvents.add(event);
                     }
                 }
@@ -84,8 +82,7 @@ public class EventController {
         if (filter.equalsIgnoreCase("notFamilyFriendly")) {
                 for (Event event : allEvents) {
                     if ((event.getName().toLowerCase().contains(searchTerm)
-                            || event.getDescription().toLowerCase().contains(searchTerm)
-                            || event.getLocation().toLowerCase().contains(searchTerm)) && !event.isFamilyFriendly()) {
+                            || event.getDescription().toLowerCase().contains(searchTerm)) && !event.isFamilyFriendly()) {
                         matchingEvents.add(event);
                     }
                 }
