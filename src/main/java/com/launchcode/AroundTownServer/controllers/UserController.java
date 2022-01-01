@@ -32,13 +32,25 @@ public class UserController {
         userRepository.save(newUser);
     }
 
-    @PostMapping("/emailcheck")
-    public ResponseEntity<?> emailCheck(@RequestBody Map<String, Object> inputData) {
-        String email = (String)inputData.get("email");
-        LOG.debug("Checking for existing email " + email);
+    @GetMapping("/users/confirm/{email}")
+    public boolean confirmEmail(@PathVariable("email") String email) {
+        List<User> allUsers = getAllUsers();
+        for(User user : allUsers) {
+            if(email.equalsIgnoreCase(user.getEmail())) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-        Boolean bool = userValidator.emailExists(email);
-
-        return ResponseEntity.status(HttpStatus.OK).body(bool);
+    @GetMapping("/users/confirm/{username}")
+    public boolean confirmUsername(@PathVariable("username") String username) {
+        List<User> allUsers = getAllUsers();
+        for(User user : allUsers) {
+            if(username.equalsIgnoreCase(user.getUsername())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
