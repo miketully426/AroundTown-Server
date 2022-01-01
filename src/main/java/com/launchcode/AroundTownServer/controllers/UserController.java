@@ -29,4 +29,18 @@ public class UserController {
         User newUser = new User(user.getName(), user.getUsername(), user.getEmail(), user.getPwHash());
         userRepository.save(newUser);
     }
+    //Get Mapping users/confirm/{{username}}
+    //takes @PathVariable of username
+    //loops through all user usernames if it matches one, send false, if not send true
+    @GetMapping("users/confirm/{email}")
+    public boolean confirmEmail(@PathVariable("email") String email) {
+        List<User> allUsers = getAllUsers();
+
+        for(User user : allUsers) {
+            if(email.equalsIgnoreCase(user.getEmail())) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
