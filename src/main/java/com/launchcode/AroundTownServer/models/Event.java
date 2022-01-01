@@ -11,11 +11,11 @@ import java.util.Objects;
 @Entity
 public class Event {
 
-    public String name;
+    private String name;
 
-    public String description;
+    private String description;
 
-    public String location;
+    private String location;
 
     private String date;
 
