@@ -32,18 +32,19 @@ public class UserController {
         userRepository.save(newUser);
     }
 
-    @GetMapping("/users/confirm/{email}")
+    @GetMapping("/users/confirm/email/{email}")
     public boolean confirmEmail(@PathVariable("email") String email) {
         List<User> allUsers = getAllUsers();
         for(User user : allUsers) {
             if(email.equalsIgnoreCase(user.getEmail())) {
+                System.out.println(false);
                 return false;
             }
         }
         return true;
     }
 
-    @GetMapping("/users/confirm/{username}")
+    @GetMapping("/users/confirm/username/{username}")
     public boolean confirmUsername(@PathVariable("username") String username) {
         List<User> allUsers = getAllUsers();
         for(User user : allUsers) {
