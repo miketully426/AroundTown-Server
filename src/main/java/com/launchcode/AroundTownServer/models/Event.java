@@ -27,7 +27,9 @@ public class Event {
 
     private boolean familyFriendly;
 
-    public Event(String name, String description, String location, String date, String time, String entryCost, boolean familyFriendly) {
+    private String zipCode;
+
+    public Event(String name, String description, String location, String date, String time, String entryCost, boolean familyFriendly, String zipCode) {
         this.name = name;
         this.description = description;
         this.location = location;
@@ -35,6 +37,7 @@ public class Event {
         this.time = time;
         this.entryCost = entryCost;
         this.familyFriendly = familyFriendly;
+        this.zipCode = zipCode;
     }
 
     @Override
