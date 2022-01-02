@@ -11,7 +11,7 @@ import java.util.Locale;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api")
+@RequestMapping("/api/events")
 @ResponseBody
 public class EventController {
 
@@ -22,74 +22,51 @@ public class EventController {
         this.eventRepository = eventRepository;
     }
 
-    @GetMapping("/events")
+    @GetMapping("")
     public List<Event> getAllEvents() {
         return (List<Event>) eventRepository.findAll();
     }
 
-    @PostMapping("/events")
+    @PostMapping("")
     void addEvent(@RequestBody Event event) {
         eventRepository.save(event);
     }
 
-    @GetMapping("/events/{filter}")
-    public List<Event> filterAllEvents(@PathVariable("filter") String filter) {
-        List<Event> allEvents = getAllEvents();
-        List<Event> matchingEvents = new ArrayList<>();
-
-        if(filter.equalsIgnoreCase("none")) {
-            matchingEvents = allEvents;
-        }
-        if(filter.equalsIgnoreCase("familyFriendly")) {
-            for(Event event : allEvents) {
-                if(event.isFamilyFriendly()) {
-                    matchingEvents.add(event);
-                }
-            }
-        }
-        if(filter.equalsIgnoreCase("notFamilyFriendly")) {
-            for(Event event : allEvents) {
-                if(!event.isFamilyFriendly()) {
-                    matchingEvents.add(event);
-                }
-            }
-        }
-        return matchingEvents;
+    @GetMapping("/filterAllFamFriendly/{famFriendly}")
+    public List<Event> filterAllByFamFriendly(@PathVariable("famFriendly") boolean famFriendly) {
+        return (List<Event>) eventRepository.findByFamilyFriendly(famFriendly);
     }
 
-    @GetMapping("/events/{searchTerm}/{filter}")
-    public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm, @PathVariable("filter") String filter) {
+    @GetMapping("/searchByKeyword/{searchTerm}")
+    public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm) {
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
-
-        if (filter.equalsIgnoreCase("none")) {
-            for (Event event : allEvents) {
-                if (event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm)) {
-                    matchingEvents.add(event);
-                }
+        for(Event event : allEvents) {
+            if (event.getName().toLowerCase().contains(searchTerm)
+                    || event.getDescription().toLowerCase().contains(searchTerm)
+                    || event.getLocationName().toLowerCase().contains(searchTerm)
+            ) {
+                matchingEvents.add(event);
             }
-        }
-        if (filter.equalsIgnoreCase("familyFriendly")) {
-            for (Event event : allEvents) {
-                if ((event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm)) && event.isFamilyFriendly()) {
-                    matchingEvents.add(event);
-                }
-            }
-        }
-        if (filter.equalsIgnoreCase("notFamilyFriendly")) {
-                for (Event event : allEvents) {
-                    if ((event.getName().toLowerCase().contains(searchTerm)
-                            || event.getDescription().toLowerCase().contains(searchTerm)
-                            || event.getLocation().toLowerCase().contains(searchTerm)) && !event.isFamilyFriendly()) {
-                        matchingEvents.add(event);
-                    }
-                }
         }
         return matchingEvents;
-
     }
+
+    @GetMapping("/searchByKeywordFamFriendly/{searchTerm}/{famFriendly}")
+    public List<Event> searchEventsByKeyWordAndFamFriendly(@PathVariable("searchTerm") String searchTerm,
+                                                           @PathVariable("famFriendly") boolean famFriendly) {
+        Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
+        List<Event> matchingEvents = new ArrayList<>();
+        for(Event event : famFriendlyEvents) {
+            if (event.getName().toLowerCase().contains(searchTerm)
+                    || event.getDescription().toLowerCase().contains(searchTerm)
+                    || event.getLocationName().toLowerCase().contains(searchTerm)
+            ) {
+                matchingEvents.add(event);
+            }
+        }
+        return matchingEvents;
+    }
+
+
 }
