@@ -15,9 +15,17 @@ public class Event {
 
     private String name;
 
-    private String description;
+    public String description;
 
     private String locationName;
+
+    private String address;
+
+    private String city;
+
+    private String state;
+
+    private String zipCode;
 
     private String date;
 
@@ -27,23 +35,18 @@ public class Event {
 
     private boolean familyFriendly;
 
-    private String zipCode;
-
-    private String city;
-
-    private String state;
-
-    public Event(String name, String description, String locationName, String date, String time, String entryCost, boolean familyFriendly, String zipCode, String city, String state) {
+    public Event(String name, String description, String locationName, String address, String city, String state, String zipCode, String date, String time, String entryCost, boolean familyFriendly) {
         this.name = name;
         this.description = description;
         this.locationName = locationName;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
         this.date = date;
         this.time = time;
         this.entryCost = entryCost;
         this.familyFriendly = familyFriendly;
-        this.zipCode = zipCode;
-        this.city = city;
-        this.state = state;
     }
 
     @Override
@@ -58,5 +61,7 @@ public class Event {
     public int hashCode() {
         return Objects.hash(eventId);
     }
+
+
 
 }

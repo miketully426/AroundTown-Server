@@ -7,32 +7,103 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+
+import static java.lang.Double.parseDouble;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/api")
+@RequestMapping("/api/events")
 @ResponseBody
 public class EventController {
 
     @Autowired
     private final EventRepository eventRepository;
 
-    public EventController (EventRepository eventRepository) {
+    public EventController(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
 
-    @GetMapping("/events")
+    @GetMapping("")
     public List<Event> getAllEvents() {
         return (List<Event>) eventRepository.findAll();
     }
 
-    @PostMapping("/events")
+    @PostMapping("")
     void addEvent(@RequestBody Event event) {
         eventRepository.save(event);
     }
+    @GetMapping("/filterAllFamFriendly/{famFriendly}")
+    public List<Event> filterAllByFamFriendly(@PathVariable("famFriendly") boolean famFriendly) {
+        return (List<Event>) eventRepository.findByFamilyFriendly(famFriendly);
+    }
+    @GetMapping({"filterAllEntryCost/{lowPrice}",
+            "/filterAllEntryCost/{lowPrice}/{highPrice}"})
 
-    @GetMapping("/events/{searchTerm}")
+    public List<Event> filterAllByEntryCost(@PathVariable("lowPrice") Integer lowPrice,
+                                            @PathVariable(required = false) Integer highPrice ) {
+        //until we find a way to successfully save a price as a double coming from JS, the number conversion needs to happen
+        //if we can figure out double storage, we can use the methods in event repository.
+        Iterable<Event> allEvents = this.eventRepository.findAll();
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if(highPrice == null && lowPrice == 0) {
+            for(Event event : allEvents) {
+                if(parseDouble(event.getEntryCost()) == lowPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for(Event event : allEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+
+        } else {
+            for(Event event : allEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+    }
+
+    @GetMapping({"/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}/{highPrice}",
+            "/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}" })
+    public List<Event>filterByFamFriendlyAndEntryCost(@PathVariable("famFriendly") boolean famFriendly,
+                                                      @PathVariable("lowPrice") Integer lowPrice,
+                                                      @PathVariable(required = false) Integer highPrice) {
+        //same comments about being unable to save price as a double to effectively search with repository function
+        Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if(highPrice == null && lowPrice == 0) {
+            for(Event event : famFriendlyEvents) {
+                if(parseDouble(event.getEntryCost()) == lowPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for(Event event : famFriendlyEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+
+        } else {
+            for(Event event : famFriendlyEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+    }
+
+
+
+    @GetMapping("/searchByKeyword/{searchTerm}")
     public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm) {
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
@@ -43,6 +114,7 @@ public class EventController {
                     || event.getZipCode().equals(searchTerm)
                     || event.getCity().toLowerCase().contains(searchTerm)
                     || event.getState().toLowerCase().contains(searchTerm)
+                    || event.getAddress().toLowerCase().contains(searchTerm)
             ) {
                 matchingEvents.add(event);
             }
@@ -50,4 +122,108 @@ public class EventController {
         return matchingEvents;
     }
 
+
+    @GetMapping("/searchByKeywordFamFriendly/{searchTerm}/{famFriendly}")
+    public List<Event> searchEventsByKeyWordAndFamFriendly(@PathVariable("searchTerm") String searchTerm,
+                                                           @PathVariable("famFriendly") boolean famFriendly) {
+        Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
+        List<Event> matchingEvents = new ArrayList<>();
+        for(Event event : famFriendlyEvents) {
+            if (event.getName().toLowerCase().contains(searchTerm)
+                    || event.getDescription().toLowerCase().contains(searchTerm)
+                    || event.getLocationName().toLowerCase().contains(searchTerm)
+            ) {
+                matchingEvents.add(event);
+            }
+        }
+        return matchingEvents;
+    }
+
+    @GetMapping({"/searchByKeywordPrice/{searchTerm}/{lowPrice}",
+            "/searchByKeywordPrice/{searchTerm}/{lowPrice}/{highPrice}"})
+    public List<Event> searchByKeywordByPrice(@PathVariable("searchTerm") String searchTerm,
+                                              @PathVariable("lowPrice") Integer lowPrice,
+                                              @PathVariable(required = false) Integer highPrice) {
+        //same comments about being unable to save price as a double to effectively search with repository function
+        Iterable<Event> allEvents = this.eventRepository.findAll();
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if(highPrice == null && lowPrice == 0) {
+            for(Event event : allEvents) {
+                if(parseDouble(event.getEntryCost()) == lowPrice
+                        && (event.getName().toLowerCase().contains(searchTerm)
+                        || event.getDescription().toLowerCase().contains(searchTerm)
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for(Event event : allEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice &&
+                        (event.getName().toLowerCase().contains(searchTerm)
+                                || event.getDescription().toLowerCase().contains(searchTerm)
+                                || event.getLocationName().toLowerCase().contains(searchTerm))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+
+        } else {
+            for(Event event : allEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+                        && (event.getName().toLowerCase().contains(searchTerm)
+                        || event.getDescription().toLowerCase().contains(searchTerm)
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+    }
+    @GetMapping({"/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}",
+            "/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/{highPrice}"})
+    public List<Event> searchByKeywordByFamFriendlyAndPrice(@PathVariable("searchTerm") String searchTerm,
+                                                            @PathVariable("famFriendly") boolean famFriendly,
+                                                            @PathVariable("lowPrice") Integer lowPrice,
+                                                            @PathVariable(required = false) Integer highPrice) {
+        //same comments about being unable to save price as a double to effectively search with repository function
+        Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if(highPrice == null && lowPrice == 0) {
+            for(Event event : famFriendlyEvents) {
+                if(parseDouble(event.getEntryCost()) == lowPrice
+                        && (event.getName().toLowerCase().contains(searchTerm)
+                        || event.getDescription().toLowerCase().contains(searchTerm)
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for(Event event : famFriendlyEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice &&
+                        (event.getName().toLowerCase().contains(searchTerm)
+                                || event.getDescription().toLowerCase().contains(searchTerm)
+                                || event.getLocationName().toLowerCase().contains(searchTerm))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+
+        } else {
+            for(Event event : famFriendlyEvents) {
+                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+                        && (event.getName().toLowerCase().contains(searchTerm)
+                        || event.getDescription().toLowerCase().contains(searchTerm)
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+    }
 }
