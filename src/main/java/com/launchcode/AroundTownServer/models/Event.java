@@ -17,7 +17,7 @@ public class Event {
 
     public String description;
 
-    private String locationName;
+    private String location;
 
     private String address;
 
@@ -35,10 +35,10 @@ public class Event {
 
     private boolean familyFriendly;
 
-    public Event(String name, String description, String locationName, String address, String city, String state, String zip, String date, String time, String entryCost, boolean familyFriendly) {
+    public Event(String name, String description, String location, String address, String city, String state, String zip, String date, String time, String entryCost, boolean familyFriendly) {
         this.name = name;
         this.description = description;
-        this.locationName = locationName;
+        this.location = location;
         this.address = address;
         this.city = city;
         this.state = state;
