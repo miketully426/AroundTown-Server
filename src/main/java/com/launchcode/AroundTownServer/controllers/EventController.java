@@ -37,11 +37,11 @@ public class EventController {
         return (List<Event>) eventRepository.findByFamilyFriendly(famFriendly);
     }
     @GetMapping({"filterAllEntryCost/{lowPrice}",
-            "/filterAllEntryCost/{lowPrice}/{highPrice}"})
+                "/filterAllEntryCost/{lowPrice}/{highPrice}"})
 
     public List<Event> filterAllByEntryCost(@PathVariable("lowPrice") Integer lowPrice,
                                             @PathVariable(required = false) Integer highPrice ) {
-        //until we find a way to successfully save a price as a double coming from JS, the number conversion needs to happen
+       //until we find a way to successfully save a price as a double coming from JS, the number conversion needs to happen
         //if we can figure out double storage, we can use the methods in event repository.
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
@@ -70,7 +70,7 @@ public class EventController {
     }
 
     @GetMapping({"/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}/{highPrice}",
-            "/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}" })
+                "/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}" })
     public List<Event>filterByFamFriendlyAndEntryCost(@PathVariable("famFriendly") boolean famFriendly,
                                                       @PathVariable("lowPrice") Integer lowPrice,
                                                       @PathVariable(required = false) Integer highPrice) {
@@ -101,8 +101,6 @@ public class EventController {
         return matchingEvents;
     }
 
-
-
     @GetMapping("/searchByKeyword/{searchTerm}")
     public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm) {
         Iterable<Event> allEvents = this.eventRepository.findAll();
@@ -122,7 +120,6 @@ public class EventController {
         }
         return matchingEvents;
     }
-
 
     @GetMapping("/searchByKeywordFamFriendly/{searchTerm}/{famFriendly}")
     public List<Event> searchEventsByKeyWordAndFamFriendly(@PathVariable("searchTerm") String searchTerm,
