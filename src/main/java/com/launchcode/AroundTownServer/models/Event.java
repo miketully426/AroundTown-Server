@@ -15,7 +15,7 @@ public class Event {
 
     private String name;
 
-    public String description;
+    private String description;
 
     private String locationName;
 
