@@ -101,17 +101,20 @@ public class EventController {
         return matchingEvents;
     }
 
-
-
     @GetMapping("/searchByKeyword/{searchTerm}")
     public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm) {
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
+        //change all following searchTerm variable in each method to searchTerm case to create case insensitivity :)
+        String searchTermLowerCase = searchTerm.toLowerCase();
         for(Event event : allEvents) {
-            if (event.getName().toLowerCase().contains(searchTerm)
-                    || event.getDescription().toLowerCase().contains(searchTerm)
-                    || event.getLocationName().toLowerCase().contains(searchTerm)
-                    ) {
+            if (event.getName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                    || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getZipCode().equals(searchTermLowerCase)
+                    || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                    || event.getState().toLowerCase().equals(searchTermLowerCase)
+            ) {
                 matchingEvents.add(event);
             }
         }
@@ -123,10 +126,14 @@ public class EventController {
                                                            @PathVariable("famFriendly") boolean famFriendly) {
         Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
         List<Event> matchingEvents = new ArrayList<>();
+        String searchTermLowerCase = searchTerm.toLowerCase();
         for(Event event : famFriendlyEvents) {
-            if (event.getName().toLowerCase().contains(searchTerm)
-                    || event.getDescription().toLowerCase().contains(searchTerm)
-                    || event.getLocationName().toLowerCase().contains(searchTerm)
+            if (event.getName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                    || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getZipCode().equals(searchTermLowerCase)
+                    || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                    || event.getState().toLowerCase().equals(searchTermLowerCase)
             ) {
                 matchingEvents.add(event);
             }
@@ -142,13 +149,16 @@ public class EventController {
         //same comments about being unable to save price as a double to effectively search with repository function
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
-
+        String searchTermLowerCase = searchTerm.toLowerCase();
         if(highPrice == null && lowPrice == 0) {
             for(Event event : allEvents) {
                 if(parseDouble(event.getEntryCost()) == lowPrice
-                        && (event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -156,9 +166,12 @@ public class EventController {
         } else if (highPrice == null && lowPrice == 100) {
             for(Event event : allEvents) {
                 if(parseDouble(event.getEntryCost()) > lowPrice &&
-                        (event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                        (event.getName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                                || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getZipCode().equals(searchTermLowerCase)
+                                || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                                || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -167,9 +180,12 @@ public class EventController {
         } else {
             for(Event event : allEvents) {
                 if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
-                        && (event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -178,21 +194,24 @@ public class EventController {
         return matchingEvents;
     }
     @GetMapping({"/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}",
-                "/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/{highPrice}"})
+            "/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/{highPrice}"})
     public List<Event> searchByKeywordByFamFriendlyAndPrice(@PathVariable("searchTerm") String searchTerm,
-                                              @PathVariable("famFriendly") boolean famFriendly,
-                                              @PathVariable("lowPrice") Integer lowPrice,
-                                              @PathVariable(required = false) Integer highPrice) {
+                                                            @PathVariable("famFriendly") boolean famFriendly,
+                                                            @PathVariable("lowPrice") Integer lowPrice,
+                                                            @PathVariable(required = false) Integer highPrice) {
         //same comments about being unable to save price as a double to effectively search with repository function
         Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
         List<Event> matchingEvents = new ArrayList<>();
-
+        String searchTermLowerCase = searchTerm.toLowerCase();
         if(highPrice == null && lowPrice == 0) {
             for(Event event : famFriendlyEvents) {
                 if(parseDouble(event.getEntryCost()) == lowPrice
-                        && (event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -200,9 +219,12 @@ public class EventController {
         } else if (highPrice == null && lowPrice == 100) {
             for(Event event : famFriendlyEvents) {
                 if(parseDouble(event.getEntryCost()) > lowPrice &&
-                        (event.getName().toLowerCase().contains(searchTerm)
-                                || event.getDescription().toLowerCase().contains(searchTerm)
-                                || event.getLocationName().toLowerCase().contains(searchTerm))
+                        (event.getName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                                || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getZipCode().equals(searchTermLowerCase)
+                                || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                                || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -211,9 +233,12 @@ public class EventController {
         } else {
             for(Event event : famFriendlyEvents) {
                 if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
-                        && (event.getName().toLowerCase().contains(searchTerm)
-                        || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocationName().toLowerCase().contains(searchTerm))
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
