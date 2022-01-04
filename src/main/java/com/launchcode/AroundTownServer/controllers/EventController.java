@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Double.parseDouble;
 
@@ -107,8 +108,10 @@ public class EventController {
     public List<Event> searchEventsByKeyword(@PathVariable("searchTerm") String searchTerm) {
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
+        //change all following searchTerm variable in each method to searchTerm case to create case insensitivity :)
+        String searchTermCase = searchTerm.toLowerCase();
         for(Event event : allEvents) {
-            if (event.getName().toLowerCase().contains(searchTerm)
+            if (event.getName().toLowerCase().contains(searchTermCase)
                     || event.getDescription().toLowerCase().contains(searchTerm)
                     || event.getLocationName().toLowerCase().contains(searchTerm)
                     || event.getZipCode().equals(searchTerm)
