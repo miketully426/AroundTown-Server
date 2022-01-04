@@ -115,8 +115,8 @@ public class EventController {
                     || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                     || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                     || event.getZipCode().equals(searchTermLowerCase)
-                    || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                    || event.getState().toLowerCase().contains(searchTermLowerCase)
+                    || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                    || event.getState().toLowerCase().equals(searchTermLowerCase)
             ) {
                 matchingEvents.add(event);
             }
@@ -136,8 +136,8 @@ public class EventController {
                     || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                     || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                     || event.getZipCode().equals(searchTermLowerCase)
-                    || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                    || event.getState().toLowerCase().contains(searchTermLowerCase)
+                    || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                    || event.getState().toLowerCase().equals(searchTermLowerCase)
             ) {
                 matchingEvents.add(event);
             }
@@ -161,8 +161,8 @@ public class EventController {
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                         || event.getZipCode().equals(searchTermLowerCase)
-                        || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                        || event.getState().toLowerCase().contains(searchTermLowerCase))
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -174,8 +174,8 @@ public class EventController {
                                 || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                                 || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                                 || event.getZipCode().equals(searchTermLowerCase)
-                                || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                                || event.getState().toLowerCase().contains(searchTermLowerCase))
+                                || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                                || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -188,8 +188,8 @@ public class EventController {
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                         || event.getZipCode().equals(searchTermLowerCase)
-                        || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                        || event.getState().toLowerCase().contains(searchTermLowerCase))
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -214,8 +214,8 @@ public class EventController {
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                         || event.getZipCode().equals(searchTermLowerCase)
-                        || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                        || event.getState().toLowerCase().contains(searchTermLowerCase))
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -227,8 +227,8 @@ public class EventController {
                                 || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                                 || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                                 || event.getZipCode().equals(searchTermLowerCase)
-                                || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                                || event.getState().toLowerCase().contains(searchTermLowerCase))
+                                || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                                || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -241,8 +241,8 @@ public class EventController {
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
                         || event.getZipCode().equals(searchTermLowerCase)
-                        || event.getCity().toLowerCase().contains(searchTermLowerCase)
-                        || event.getState().toLowerCase().contains(searchTermLowerCase))
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
                 ) {
                     matchingEvents.add(event);
                 }
