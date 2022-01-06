@@ -249,8 +249,8 @@ public class EventController {
         return matchingEvents;
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable("id") Integer eventId) {
+    @DeleteMapping("/delete/{eventId}")
+    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable("eventId") Integer eventId) {
         try {
             eventRepository.deleteById(eventId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
