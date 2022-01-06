@@ -110,7 +110,7 @@ public class EventController {
         for(Event event : allEvents) {
             if (event.getName().toLowerCase().contains(searchTerm)
                     || event.getDescription().toLowerCase().contains(searchTerm)
-                    || event.getLocation().toLowerCase().contains(searchTerm)
+                    || event.getLocationName().toLowerCase().contains(searchTerm)
                     ) {
                 matchingEvents.add(event);
             }
@@ -126,7 +126,7 @@ public class EventController {
         for(Event event : famFriendlyEvents) {
             if (event.getName().toLowerCase().contains(searchTerm)
                     || event.getDescription().toLowerCase().contains(searchTerm)
-                    || event.getLocation().toLowerCase().contains(searchTerm)
+                    || event.getLocationName().toLowerCase().contains(searchTerm)
             ) {
                 matchingEvents.add(event);
             }
@@ -148,7 +148,7 @@ public class EventController {
                 if(parseDouble(event.getEntryCost()) == lowPrice
                         && (event.getName().toLowerCase().contains(searchTerm)
                         || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm))
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -158,7 +158,7 @@ public class EventController {
                 if(parseDouble(event.getEntryCost()) > lowPrice &&
                         (event.getName().toLowerCase().contains(searchTerm)
                         || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm))
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -169,7 +169,7 @@ public class EventController {
                 if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
                         && (event.getName().toLowerCase().contains(searchTerm)
                         || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm))
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -192,7 +192,7 @@ public class EventController {
                 if(parseDouble(event.getEntryCost()) == lowPrice
                         && (event.getName().toLowerCase().contains(searchTerm)
                         || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm))
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -202,7 +202,7 @@ public class EventController {
                 if(parseDouble(event.getEntryCost()) > lowPrice &&
                         (event.getName().toLowerCase().contains(searchTerm)
                                 || event.getDescription().toLowerCase().contains(searchTerm)
-                                || event.getLocation().toLowerCase().contains(searchTerm))
+                                || event.getLocationName().toLowerCase().contains(searchTerm))
                 ) {
                     matchingEvents.add(event);
                 }
@@ -213,7 +213,7 @@ public class EventController {
                 if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
                         && (event.getName().toLowerCase().contains(searchTerm)
                         || event.getDescription().toLowerCase().contains(searchTerm)
-                        || event.getLocation().toLowerCase().contains(searchTerm))
+                        || event.getLocationName().toLowerCase().contains(searchTerm))
                 ) {
                     matchingEvents.add(event);
                 }
