@@ -3,6 +3,8 @@ package com.launchcode.AroundTownServer.controllers;
 import com.launchcode.AroundTownServer.data.EventRepository;
 import com.launchcode.AroundTownServer.models.Event;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -246,4 +248,15 @@ public class EventController {
         }
         return matchingEvents;
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteEvent(@PathVariable("id") Integer eventId) {
+        try {
+            eventRepository.deleteById(eventId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
