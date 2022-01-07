@@ -250,8 +250,6 @@ public class EventController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Map<String, Boolean>> deleteEvent(@PathVariable int eventId){
         Optional<Event> event = eventRepository.findById(eventId);
-
-
         eventRepository.deleteById(eventId);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
