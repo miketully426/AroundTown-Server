@@ -247,7 +247,7 @@ public class EventController {
         return matchingEvents;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{eventId}")
     public ResponseEntity<Map<String, Boolean>> deleteEvent(@PathVariable int eventId){
         Optional<Event> event = eventRepository.findById(eventId);
         eventRepository.deleteById(eventId);
