@@ -16,6 +16,7 @@ public class Event {
 
     private String name;
 
+
     private String description;
 
     private String locationName;
@@ -35,6 +36,7 @@ public class Event {
     private String entryCost;
 
     private boolean familyFriendly;
+
 
     public Event(String name, String description, String locationName, String address, String city, String state, String zipCode, String date, String time, String entryCost, boolean familyFriendly) {
         this.name = name;
@@ -62,7 +64,5 @@ public class Event {
     public int hashCode() {
         return Objects.hash(eventId);
     }
-
-
 
 }

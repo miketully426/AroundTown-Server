@@ -8,6 +8,7 @@ import java.util.List;
 
 @Repository
 public interface EventRepository extends CrudRepository<Event, Integer> {
+
     public List<Event> findByFamilyFriendly(boolean familyFriendly);
 
     public List<Event> findByEntryCostBetween(String lowPrice, String highPrice);
