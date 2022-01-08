@@ -2,6 +2,7 @@ package com.launchcode.AroundTownServer.models;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Getter @Setter @NoArgsConstructor
@@ -15,7 +16,7 @@ public class Event {
 
     private String name;
 
-    public String description;
+    private String description;
 
     private String locationName;
 
