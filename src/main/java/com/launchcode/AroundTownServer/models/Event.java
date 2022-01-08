@@ -2,6 +2,7 @@ package com.launchcode.AroundTownServer.models;
 
 import lombok.*;
 import javax.persistence.*;
+import java.util.Date;
 import java.util.Objects;
 
 @Getter @Setter @NoArgsConstructor
@@ -15,7 +16,8 @@ public class Event {
 
     private String name;
 
-    public String description;
+
+    private String description;
 
     private String locationName;
 
@@ -25,7 +27,7 @@ public class Event {
 
     private String state;
 
-    private String zip;
+    private String zipCode;
 
     private String date;
 
@@ -35,14 +37,15 @@ public class Event {
 
     private boolean familyFriendly;
 
-    public Event(String name, String description, String locationName, String address, String city, String state, String zip, String date, String time, String entryCost, boolean familyFriendly) {
+
+    public Event(String name, String description, String locationName, String address, String city, String state, String zipCode, String date, String time, String entryCost, boolean familyFriendly) {
         this.name = name;
         this.description = description;
         this.locationName = locationName;
         this.address = address;
         this.city = city;
         this.state = state;
-        this.zip = zip;
+        this.zipCode = zipCode;
         this.date = date;
         this.time = time;
         this.entryCost = entryCost;
