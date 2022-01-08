@@ -1,31 +1,23 @@
 package com.launchcode.AroundTownServer.models;
 
-import android.support.annotation.Size;
 import com.sun.istack.NotNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.management.relation.Role;
-import javax.persistence.*;
-
-
-import javax.swing.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.validation.constraints.Email;
-import java.util.HashSet;
-import java.util.Set;
 
 
-@Table(name = "user",
-       uniqueConstraints = {
-               @UniqueConstraint(columnNames = "username"),
-               @UniqueConstraint(columnNames = "email")
-       })
+
 @Entity
 public class User {
 
-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+
 
     @Id
-    @GeneratedValue //tutorial has GenerationType.IDENTITY
+    @GeneratedValue
     private int id;
 
     @NotNull
@@ -41,19 +33,15 @@ public class User {
     @NotNull
     private String pwHash;
 
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable( name = "user_roles",
-//                joinColumns = @JoinColumn(name = "user_id"),
-//                inverseJoinColumns = @JoinColumn(name = "role_id"))
-//    private Set<Role> roles = new HashSet<>();
+
 
     public User() {}
 
-    public User(String name, String username, String email, String password) {
+    public User(String name, String username, String email, String pwHash) {
         this.name = name;
         this.username = username;
         this.email = email;
-        this.pwHash = encoder.encode(password);
+        this.pwHash = pwHash;
     }
 
     public int getId() {
