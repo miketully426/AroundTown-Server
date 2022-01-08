@@ -1,5 +1,7 @@
 package com.launchcode.AroundTownServer.controllers;
 
+import com.launchcode.AroundTownServer.models.JwtRequest;
+import com.launchcode.AroundTownServer.models.JwtResponse;
 import com.launchcode.AroundTownServer.service.JwtUserDetailsService;
 import com.launchcode.AroundTownServer.config.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
