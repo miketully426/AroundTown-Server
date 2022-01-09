@@ -3,22 +3,17 @@ package com.launchcode.AroundTownServer.controllers;
 import com.launchcode.AroundTownServer.data.EventRepository;
 import com.launchcode.AroundTownServer.models.Event;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
 import static java.lang.Double.parseDouble;
 
-
-import static java.lang.Double.parseDouble;
-import static javax.xml.bind.DatatypeConverter.parseDate;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -42,36 +37,38 @@ public class EventController {
     void addEvent(@RequestBody Event event) {
         eventRepository.save(event);
     }
+
     @GetMapping("/filterAllFamFriendly/{famFriendly}")
     public List<Event> filterAllByFamFriendly(@PathVariable("famFriendly") boolean famFriendly) {
         return (List<Event>) eventRepository.findByFamilyFriendly(famFriendly);
     }
+
     @GetMapping({"filterAllEntryCost/{lowPrice}",
-                "/filterAllEntryCost/{lowPrice}/{highPrice}"})
+            "/filterAllEntryCost/{lowPrice}/{highPrice}"})
 
     public List<Event> filterAllByEntryCost(@PathVariable("lowPrice") Integer lowPrice,
-                                            @PathVariable(required = false) Integer highPrice ) {
-       //until we find a way to successfully save a price as a double coming from JS, the number conversion needs to happen
+                                            @PathVariable(required = false) Integer highPrice) {
+        //until we find a way to successfully save a price as a double coming from JS, the number conversion needs to happen
         //if we can figure out double storage, we can use the methods in event repository.
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
 
-        if(highPrice == null && lowPrice == 0) {
-            for(Event event : allEvents) {
-                if(parseDouble(event.getEntryCost()) == lowPrice) {
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : allEvents) {
+                if (parseDouble(event.getEntryCost()) == lowPrice) {
                     matchingEvents.add(event);
                 }
             }
         } else if (highPrice == null && lowPrice == 100) {
-            for(Event event : allEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice) {
+            for (Event event : allEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice) {
                     matchingEvents.add(event);
                 }
             }
 
         } else {
-            for(Event event : allEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
+            for (Event event : allEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
                     matchingEvents.add(event);
                 }
             }
@@ -80,30 +77,30 @@ public class EventController {
     }
 
     @GetMapping({"/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}/{highPrice}",
-                "/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}" })
-    public List<Event>filterByFamFriendlyAndEntryCost(@PathVariable("famFriendly") boolean famFriendly,
-                                                      @PathVariable("lowPrice") Integer lowPrice,
-                                                      @PathVariable(required = false) Integer highPrice) {
+            "/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}"})
+    public List<Event> filterByFamFriendlyAndEntryCost(@PathVariable("famFriendly") boolean famFriendly,
+                                                       @PathVariable("lowPrice") Integer lowPrice,
+                                                       @PathVariable(required = false) Integer highPrice) {
         //same comments about being unable to save price as a double to effectively search with repository function
         Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
         List<Event> matchingEvents = new ArrayList<>();
 
-        if(highPrice == null && lowPrice == 0) {
-            for(Event event : famFriendlyEvents) {
-                if(parseDouble(event.getEntryCost()) == lowPrice) {
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : famFriendlyEvents) {
+                if (parseDouble(event.getEntryCost()) == lowPrice) {
                     matchingEvents.add(event);
                 }
             }
         } else if (highPrice == null && lowPrice == 100) {
-            for(Event event : famFriendlyEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice) {
+            for (Event event : famFriendlyEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice) {
                     matchingEvents.add(event);
                 }
             }
 
         } else {
-            for(Event event : famFriendlyEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
+            for (Event event : famFriendlyEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
                     matchingEvents.add(event);
                 }
             }
@@ -117,7 +114,7 @@ public class EventController {
         List<Event> matchingEvents = new ArrayList<>();
         //change all following searchTerm variable in each method to searchTerm case to create case insensitivity :)
         String searchTermLowerCase = searchTerm.toLowerCase();
-        for(Event event : allEvents) {
+        for (Event event : allEvents) {
             if (event.getName().toLowerCase().contains(searchTermLowerCase)
                     || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                     || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -137,7 +134,7 @@ public class EventController {
         Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
         List<Event> matchingEvents = new ArrayList<>();
         String searchTermLowerCase = searchTerm.toLowerCase();
-        for(Event event : famFriendlyEvents) {
+        for (Event event : famFriendlyEvents) {
             if (event.getName().toLowerCase().contains(searchTermLowerCase)
                     || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                     || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -160,9 +157,9 @@ public class EventController {
         Iterable<Event> allEvents = this.eventRepository.findAll();
         List<Event> matchingEvents = new ArrayList<>();
         String searchTermLowerCase = searchTerm.toLowerCase();
-        if(highPrice == null && lowPrice == 0) {
-            for(Event event : allEvents) {
-                if(parseDouble(event.getEntryCost()) == lowPrice
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : allEvents) {
+                if (parseDouble(event.getEntryCost()) == lowPrice
                         && (event.getName().toLowerCase().contains(searchTermLowerCase)
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -174,8 +171,8 @@ public class EventController {
                 }
             }
         } else if (highPrice == null && lowPrice == 100) {
-            for(Event event : allEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice &&
+            for (Event event : allEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice &&
                         (event.getName().toLowerCase().contains(searchTermLowerCase)
                                 || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                                 || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -188,8 +185,8 @@ public class EventController {
             }
 
         } else {
-            for(Event event : allEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+            for (Event event : allEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
                         && (event.getName().toLowerCase().contains(searchTermLowerCase)
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -203,6 +200,7 @@ public class EventController {
         }
         return matchingEvents;
     }
+
     @GetMapping({"/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}",
             "/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/{highPrice}"})
     public List<Event> searchByKeywordByFamFriendlyAndPrice(@PathVariable("searchTerm") String searchTerm,
@@ -213,9 +211,9 @@ public class EventController {
         Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
         List<Event> matchingEvents = new ArrayList<>();
         String searchTermLowerCase = searchTerm.toLowerCase();
-        if(highPrice == null && lowPrice == 0) {
-            for(Event event : famFriendlyEvents) {
-                if(parseDouble(event.getEntryCost()) == lowPrice
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : famFriendlyEvents) {
+                if (parseDouble(event.getEntryCost()) == lowPrice
                         && (event.getName().toLowerCase().contains(searchTermLowerCase)
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -227,8 +225,8 @@ public class EventController {
                 }
             }
         } else if (highPrice == null && lowPrice == 100) {
-            for(Event event : famFriendlyEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice &&
+            for (Event event : famFriendlyEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice &&
                         (event.getName().toLowerCase().contains(searchTermLowerCase)
                                 || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                                 || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -241,8 +239,8 @@ public class EventController {
             }
 
         } else {
-            for(Event event : famFriendlyEvents) {
-                if(parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+            for (Event event : famFriendlyEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
                         && (event.getName().toLowerCase().contains(searchTermLowerCase)
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
@@ -256,7 +254,7 @@ public class EventController {
         }
         return matchingEvents;
     }
-    
+
     @GetMapping("/{eventId}")
     public Optional<Event> getEventById(@PathVariable("eventId") int eventId) {
         return eventRepository.findById(eventId);
@@ -306,4 +304,14 @@ public class EventController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+        @DeleteMapping("/delete/{eventId}")
+        public ResponseEntity<Map<String, Boolean>> deleteEvent ( @PathVariable int eventId){
+            Optional<Event> event = eventRepository.findById(eventId);
+            eventRepository.deleteById(eventId);
+            Map<String, Boolean> response = new HashMap<>();
+            response.put("deleted", Boolean.TRUE);
+            return ResponseEntity.ok(response);
+        }
+
 }
