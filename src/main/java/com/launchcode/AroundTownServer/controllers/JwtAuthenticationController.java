@@ -1,22 +1,26 @@
 package com.launchcode.AroundTownServer.controllers;
 
+import com.launchcode.AroundTownServer.config.JwtTokenUtil;
 import com.launchcode.AroundTownServer.models.JwtRequest;
 import com.launchcode.AroundTownServer.models.JwtResponse;
+import com.launchcode.AroundTownServer.models.User;
 import com.launchcode.AroundTownServer.service.JwtUserDetailsService;
-import com.launchcode.AroundTownServer.config.JwtTokenUtil;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -32,17 +36,37 @@ public class JwtAuthenticationController {
     @Autowired
     private JwtUserDetailsService userDetailsService;
 
+    @Value("${jwt.secret}")
+    private String secret;
+
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
 
+        System.out.println("----->" + authenticationRequest.getUsername() + authenticationRequest.getPwHash());
+
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPwHash());
 
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
+        System.out.println("-----> i am here");
 
-        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        User user = new User("", authenticationRequest.getUsername(), "", authenticationRequest.getPwHash());
+//       final UserDetails userDetails = userDetailsService
+//                .loadUserByUsername(authenticationRequest.getUsername(), authenticationRequest.getPwHash());
+//
+       // final String token = jwtTokenUtil.generateToken(userDetails);
+
+        String token = doGenerateToken(new HashMap<>(), user.getUsername());
+
+        System.out.println("----->" + token);
 
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    private String doGenerateToken(Map<String, Object> claims, String subject) {
+        long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+        return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + JWT_TOKEN_VALIDITY * 1000))
+                .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
     private void authenticate(String username, String password) throws Exception {
