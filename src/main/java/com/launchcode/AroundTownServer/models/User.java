@@ -14,7 +14,7 @@ import javax.validation.constraints.Email;
 public class User {
 
 
-
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Id
     @GeneratedValue
@@ -37,11 +37,11 @@ public class User {
 
     public User() {}
 
-    public User(String name, String username, String email, String pwHash) {
+    public User(String name, String username, String email, String password) {
         this.name = name;
         this.username = username;
         this.email = email;
-        this.pwHash = pwHash;
+        this.pwHash = encoder.encode(password);
     }
 
     public int getId() {
