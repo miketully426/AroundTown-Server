@@ -35,7 +35,7 @@ public class UserController {
         userRepository.save(user);
     }
   
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/userprofile/{id}")
     public Optional<User> getUserById(@PathVariable("id") int id) {
         return userRepository.findById(id);
     }
