@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import static java.lang.Double.parseDouble;
 
 
 import static java.lang.Double.parseDouble;
+import static javax.xml.bind.DatatypeConverter.parseDate;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -260,7 +262,7 @@ public class EventController {
         return eventRepository.findById(eventId);
     }
   
-    @GetMapping("/events/getPriceById/{eventId}")
+    @GetMapping("/getPriceById/{eventId}")
     public Double getPriceByEventId(@PathVariable("eventId") int eventId) {
         Event event = eventRepository.findById(eventId).get();
         return parseDouble(event.getEntryCost());
@@ -268,12 +270,24 @@ public class EventController {
         //as we won't need to pull and convert the price specifically. Right now this is not ideal.
     }
 
+    @GetMapping("/getDateById/{eventId}")
+    public HashMap<String, Number> getDateByEventId(@PathVariable("eventId") int eventId) {
+        Event event = eventRepository.findById(eventId).get();
+        return event.getDate();
+    }
+
+    @GetMapping("/getTimeById/{eventId}")
+    public HashMap<String, Number> getTimeByEventId(@PathVariable("eventId") int eventId) {
+        Event event = eventRepository.findById(eventId).get();
+        return event.getTime();
+    }
+
     @PutMapping("/{eventId}")
     public ResponseEntity<Event> updateEvent(@PathVariable("eventId") int eventId, @Valid @RequestBody Event eventDetails) {
         Optional<Event> event = eventRepository.findById(eventId);
         Event eventData = event.get();
 
-        if(event.isPresent()) {
+        if (event.isPresent()) {
             Event updatedEvent = eventDetails;
             eventData.setName(updatedEvent.getName());
             eventData.setDescription(updatedEvent.getDescription());
@@ -291,4 +305,5 @@ public class EventController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
 }
