@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import static java.lang.Double.parseDouble;
@@ -258,13 +259,25 @@ public class EventController {
     public Optional<Event> getEventById(@PathVariable("eventId") int eventId) {
         return eventRepository.findById(eventId);
     }
-
-    @GetMapping("/events/getPriceById/{eventId}")
+  
+    @GetMapping("/getPriceById/{eventId}")
     public Double getPriceByEventId(@PathVariable("eventId") int eventId) {
         Event event = eventRepository.findById(eventId).get();
         return parseDouble(event.getEntryCost());
         //this function will be useless when we are able to save entryCost as a double from front,
         //as we won't need to pull and convert the price specifically. Right now this is not ideal.
+    }
+
+    @GetMapping("/getDateById/{eventId}")
+    public HashMap<String, Number> getDateByEventId(@PathVariable("eventId") int eventId) {
+        Event event = eventRepository.findById(eventId).get();
+        return event.getDate();
+    }
+
+    @GetMapping("/getTimeById/{eventId}")
+    public HashMap<String, Number> getTimeByEventId(@PathVariable("eventId") int eventId) {
+        Event event = eventRepository.findById(eventId).get();
+        return event.getTime();
     }
 
     @PutMapping("/{eventId}")
@@ -300,4 +313,5 @@ public class EventController {
             response.put("deleted", Boolean.TRUE);
             return ResponseEntity.ok(response);
         }
+
 }
