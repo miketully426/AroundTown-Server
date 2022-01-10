@@ -69,10 +69,10 @@ public class UserController {
         return userRepository.findByUsername(username);
     }
 
-    @DeleteMapping("/users/delete/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable String username){
-        Optional<User> user = userRepository.findByUsername(username);
-        userRepository.deleteByUsername(username);
+    @DeleteMapping("/userprofile/delete/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable int id){
+        Optional<User> user = userRepository.findById(id);
+        userRepository.deleteById(id);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
