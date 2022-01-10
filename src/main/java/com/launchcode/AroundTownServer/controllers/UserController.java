@@ -3,7 +3,10 @@ package com.launchcode.AroundTownServer.controllers;
 import com.launchcode.AroundTownServer.data.UserRepository;
 import com.launchcode.AroundTownServer.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,4 +68,16 @@ public class UserController {
     public Optional<User> getUserByUserName(@PathVariable("username") String username) {
         return userRepository.findByUsername(username);
     }
+
+    @DeleteMapping("/users/delete/{username}")
+    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable("username") String username){
+        Optional<User> user = userRepository.findByUsername(username);
+        userRepository.delete();
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
+        //still a work in progress this is
+    }
+
+
 }
