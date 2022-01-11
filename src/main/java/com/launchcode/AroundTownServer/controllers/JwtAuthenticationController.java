@@ -4,6 +4,7 @@ import com.launchcode.AroundTownServer.config.JwtTokenUtil;
 import com.launchcode.AroundTownServer.models.JwtRequest;
 import com.launchcode.AroundTownServer.models.JwtResponse;
 import com.launchcode.AroundTownServer.models.User;
+import com.launchcode.AroundTownServer.models.UserDTO;
 import com.launchcode.AroundTownServer.service.JwtUserDetailsService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -60,6 +61,11 @@ public class JwtAuthenticationController {
         System.out.println("----->" + token);
 
         return ResponseEntity.ok(new JwtResponse(token));
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public ResponseEntity<?> saveUser(@RequestBody UserDTO user) throws Exception {
+        return ResponseEntity.ok(userDetailsService.save(user));
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {
