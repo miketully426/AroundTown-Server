@@ -1,0 +1,12 @@
+2022-01-10 19:24:24 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE EVENT (EVENT_ID INTEGER NOT NULL, DATE VARCHAR(255), DESCRIPTION VARCHAR(255), ENTRY_COST VARCHAR(255), FAMILY_FRIENDLY BIT NOT NULL, LOCATION VARCHAR(255), NAME VARCHAR(255), TIME VARCHAR(255), PRIMARY KEY (EVENT_ID)) ENGINE=[*]INNODB"; expected "identifier"; SQL statement:
+create table event (event_id integer not null, date varchar(255), description varchar(255), entry_cost varchar(255), family_friendly bit not null, location varchar(255), name varchar(255), time varchar(255), primary key (event_id)) engine=InnoDB [42001-200]
+2022-01-10 19:24:24 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE HIBERNATE_SEQUENCE (NEXT_VAL BIGINT) ENGINE=[*]INNODB"; expected "identifier"; SQL statement:
+create table hibernate_sequence (next_val bigint) engine=InnoDB [42001-200]
+2022-01-10 19:24:24 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "HIBERNATE_SEQUENCE" not found; SQL statement:
+insert into hibernate_sequence values ( 1 ) [42102-200]
+2022-01-10 19:24:24 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "CREATE TABLE USER (ID INTEGER NOT NULL, EMAIL VARCHAR(255), NAME VARCHAR(255), PW_HASH VARCHAR(255), USERNAME VARCHAR(255), PRIMARY KEY (ID)) ENGINE=[*]INNODB"; expected "identifier"; SQL statement:
+create table user (id integer not null, email varchar(255), name varchar(255), pw_hash varchar(255), username varchar(255), primary key (id)) engine=InnoDB [42001-200]
