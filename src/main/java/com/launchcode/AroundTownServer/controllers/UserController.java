@@ -3,7 +3,10 @@ package com.launchcode.AroundTownServer.controllers;
 import com.launchcode.AroundTownServer.data.UserRepository;
 import com.launchcode.AroundTownServer.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +28,23 @@ public class UserController {
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return (List<User>) userRepository.findAll();
+    }
+
+    @PostMapping("/authenticate")
+    public HashMap<String, String> authenticate(@RequestBody User user) {
+        Optional<User> userData = userRepository.findByUsername(user.getUsername());
+        HashMap<String, String> map = new HashMap<>();
+        if(userData.isPresent()) {
+            String password = userData.get().getPwHash();
+            if(userData.get().isMatchingPassword(password)) {
+                map.put("status", "success");
+            } else {
+                map.put("status", "failure");
+            }
+        } else {
+            map.put("status", "failure");
+        }
+        return map;
     }
 
     @PostMapping("/users")
