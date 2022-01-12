@@ -71,6 +71,10 @@ public class User {
         return pwHash;
     }
 
+    public String encodedPassword(String password) {
+     return encoder.encode(password);
+    }
+
     public String getEmail() {
         return email;
     }

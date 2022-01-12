@@ -35,8 +35,9 @@ public class UserController {
         Optional<User> userData = userRepository.findByUsername(user.getUsername());
         HashMap<String, String> map = new HashMap<>();
         if(userData.isPresent()) {
-            String password = userData.get().getPwHash();
-            if(userData.get().isMatchingPassword(password)) {
+            User userInfo = userData.get();
+            String receivedPassword =  user.getPwHash();
+            if(userInfo.isMatchingPassword(receivedPassword)) {
                 map.put("status", "success");
             } else {
                 map.put("status", "failure");
