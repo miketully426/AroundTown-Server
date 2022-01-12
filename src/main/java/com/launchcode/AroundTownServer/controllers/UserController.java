@@ -37,7 +37,8 @@ public class UserController {
         if(userData.isPresent()) {
             User userInfo = userData.get();
             String receivedPassword =  user.getPwHash();
-            if(userInfo.isMatchingPassword(receivedPassword)) {
+//            if(userInfo.isMatchingPassword(receivedPassword)) {
+            if (userInfo.getPwHash().equals(receivedPassword)) {
                 map.put("status", "success");
             } else {
                 map.put("status", "failure");
