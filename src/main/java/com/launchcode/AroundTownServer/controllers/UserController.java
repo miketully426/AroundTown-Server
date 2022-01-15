@@ -36,6 +36,25 @@ public class UserController {
         userRepository.save(newUser);
     }
 
+    @PostMapping("/authenticate")
+    public HashMap<String, String> authenticate(@RequestBody User user) {
+        Optional<User> userData = userRepository.findByUsername(user.getUsername());
+        HashMap<String, String> map = new HashMap<>();
+        if(userData.isPresent()) {
+            User userInfo = userData.get();
+            String receivedPassword =  user.getPwHash();
+//            if(userInfo.isMatchingPassword(receivedPassword)) {
+            if (userInfo.getPwHash().equals(receivedPassword)) {
+                map.put("status", "success");
+            } else {
+                map.put("status", "failure");
+            }
+        } else {
+            map.put("status", "failure");
+        }
+        return map;
+    }
+
     @GetMapping("/users/confirm/email/{email}")
     public boolean confirmEmail(@PathVariable("email") String email) {
         List<User> allUsers = getAllUsers();
