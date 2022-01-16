@@ -4,6 +4,7 @@ import com.launchcode.AroundTownServer.data.UserRepository;
 import com.launchcode.AroundTownServer.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,6 +21,8 @@ public class UserController {
 
     @Autowired
     private final UserRepository userRepository;
+
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -38,13 +41,14 @@ public class UserController {
 
     @PostMapping("/authenticate")
     public HashMap<String, String> authenticate(@RequestBody User user) {
+
         Optional<User> userData = userRepository.findByUsername(user.getUsername());
+
         HashMap<String, String> map = new HashMap<>();
+
         if(userData.isPresent()) {
             User userInfo = userData.get();
-            String receivedPassword =  user.getPwHash();
-//            if(userInfo.isMatchingPassword(receivedPassword)) {
-            if (userInfo.getPwHash().equals(receivedPassword)) {
+            if (encoder.matches(user.getPwHash(), userInfo.getPwHash())) {
                 map.put("status", "success");
             } else {
                 map.put("status", "failure");
