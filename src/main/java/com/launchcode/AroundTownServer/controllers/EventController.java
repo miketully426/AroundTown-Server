@@ -33,10 +33,13 @@ public class EventController {
         return (List<Event>) eventRepository.findAll();
     }
 
-    @PostMapping("")
-    void addEvent(@RequestBody Event event) {
+    @PostMapping("/saveEvent")
+    public Event  addEvent(@RequestBody Event event) {
         eventRepository.save(event);
+        return event;
+
     }
+
 
     @GetMapping("/filterAllFamFriendly/{famFriendly}")
     public List<Event> filterAllByFamFriendly(@PathVariable("famFriendly") boolean famFriendly) {
@@ -280,7 +283,7 @@ public class EventController {
         return event.getTime();
     }
 
-    @PutMapping("/{eventId}")
+    @PutMapping("/edit/{eventId}")
     public ResponseEntity<Event> updateEvent(@PathVariable("eventId") int eventId, @Valid @RequestBody Event eventDetails) {
         Optional<Event> event = eventRepository.findById(eventId);
         Event eventData = event.get();
@@ -315,3 +318,4 @@ public class EventController {
         }
 
 }
+//test post saveEvent function to return event??
