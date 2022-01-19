@@ -79,6 +79,51 @@ public class EventController {
         return matchingEvents;
     }
 
+    @PostMapping("/filterAllDate")
+    //Maybe we could parse the date on the front and send just numbers for year, month, day, then match back here
+            //if this doesn't work
+    public List<Event> filterAllByDate(@RequestBody HashMap<String, Number> date) {
+        return (List<Event>) eventRepository.findByDate(date);
+    }
+
+    @PostMapping("/filterAllFamFriendDate/{famFriendly}")
+    public List<Event> filterAllByFamFriendlyAndDate(@PathVariable("famFriendly") boolean famFriendly,
+                                                     @RequestBody HashMap<String, Number> date){
+        return (List<Event>) eventRepository.findByFamilyFriendlyAndDate(famFriendly, date);
+    }
+
+    @PostMapping({"/filterAllPriceDate/{lowPrice}/{highPrice}",
+            "/filterAllFamFriendlyEntryCost/{lowPrice}"})
+    public List<Event> filterByPriceAndDate(@RequestBody HashMap<String, Number> date,
+                                            @PathVariable("lowPrice") Integer lowPrice,
+                                            @PathVariable(required = false) Integer highPrice) {
+
+        Iterable<Event> dateEvents = this.eventRepository.findByDate(date);
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : dateEvents) {
+                if(parseDouble(event.getEntryCost()) == lowPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+
+    }
+
     @GetMapping({"/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}/{highPrice}",
             "/filterAllFamFriendlyEntryCost/{famFriendly}/{lowPrice}"})
     public List<Event> filterByFamFriendlyAndEntryCost(@PathVariable("famFriendly") boolean famFriendly,
@@ -87,6 +132,7 @@ public class EventController {
         //same comments about being unable to save price as a double to effectively search with repository function
         Iterable<Event> famFriendlyEvents = this.eventRepository.findByFamilyFriendly(famFriendly);
         List<Event> matchingEvents = new ArrayList<>();
+
 
         if (highPrice == null && lowPrice == 0) {
             for (Event event : famFriendlyEvents) {
@@ -108,6 +154,39 @@ public class EventController {
                 }
             }
         }
+        return matchingEvents;
+    }
+
+    @PostMapping({"/filterAllFamFriendlyPriceDate/{famFriendly}/{lowPrice}/{highPrice}",
+            "/filterAllFamFriendlyPriceDate/{famFriendly}/{lowPrice}"})
+    public List<Event> filterAllByFamFriendlyPriceAndDate(@RequestBody HashMap<String, Number> date,
+                                                          @PathVariable("famFriendly") boolean famFriendly,
+                                                          @PathVariable("lowPrice") Integer lowPrice,
+                                                          @PathVariable(required = false) Integer highPrice) {
+       //This can be simplified once prices are saved as numbers
+        Iterable<Event> dateEvents = this.eventRepository.findByDate(date);
+        List<Event> matchingEvents = new ArrayList<>();
+
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : dateEvents) {
+                if(parseDouble(event.getEntryCost()) == lowPrice && event.isFamilyFriendly() == famFriendly) {
+                    matchingEvents.add(event);
+                }
+            }
+        }  else if (highPrice == null && lowPrice == 100) {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && event.isFamilyFriendly() == famFriendly) {
+                    matchingEvents.add(event);
+                }
+            }
+        }   else {
+                for (Event event : dateEvents) {
+                    if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+                            && event.isFamilyFriendly() == famFriendly) {
+                        matchingEvents.add(event);
+                    }
+                }
+            }
         return matchingEvents;
     }
 
@@ -204,6 +283,26 @@ public class EventController {
         return matchingEvents;
     }
 
+    @PostMapping("/searchKeywordDate/{searchTerm}")
+    public List<Event> searchByKeywordAndDate(@PathVariable("searchTerm") String searchTerm,
+                                              @RequestBody HashMap<String, Number> date) {
+        Iterable<Event> dateEvents = this.eventRepository.findByDate(date);
+        List<Event> matchingEvents = new ArrayList<>();
+        String searchTermLowerCase = searchTerm.toLowerCase();
+
+        for (Event event: dateEvents) {
+            if (event.getName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                    || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getZipCode().equals(searchTermLowerCase)
+                    || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                    || event.getState().toLowerCase().equals(searchTermLowerCase)) {
+                matchingEvents.add(event);
+            }
+        }
+        return matchingEvents;
+    }
+
     @GetMapping({"/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}",
             "/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/{highPrice}"})
     public List<Event> searchByKeywordByFamFriendlyAndPrice(@PathVariable("searchTerm") String searchTerm,
@@ -244,6 +343,139 @@ public class EventController {
         } else {
             for (Event event : famFriendlyEvents) {
                 if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+    }
+
+    @PostMapping("/searchKeywordDateFamFriendly/{searchTerm}/{famFriendly}")
+    public List<Event> searchByKeywordByDateAndFamFriendly(@PathVariable("searchTerm") String searchTerm,
+                                                           @PathVariable("famFriendly") boolean famFriendly,
+                                                           @RequestBody HashMap<String, Number> date) {
+        Iterable<Event> dateEvents = this.eventRepository.findByDate(date);
+        List<Event> matchingEvents = new ArrayList<>();
+        String searchTermLowerCase = searchTerm.toLowerCase();
+
+        for (Event event: dateEvents) {
+            if (event.isFamilyFriendly() == famFriendly && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                    || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                    || event.getZipCode().equals(searchTermLowerCase)
+                    || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                    || event.getState().toLowerCase().equals(searchTermLowerCase))) {
+                matchingEvents.add(event);
+            }
+        }
+        return matchingEvents;
+
+    }
+
+    @PostMapping({"/searchByKeywordDatePrice/{searchTerm}/{lowPrice}/{highPrice}",
+                    "/searchByKeywordDatePrice/{searchTerm}/{lowPrice}"})
+    public List<Event> searchByKeywordByDateAndPrice(@RequestBody HashMap<String, Number> date,
+                                                     @PathVariable("searchTerm") String searchTerm,
+                                                     @PathVariable("lowPrice") Integer lowPrice,
+                                                     @PathVariable(required = false) Integer highPrice) {
+        Iterable<Event> dateEvents = this.eventRepository.findByDate(date);
+        List<Event> matchingEvents = new ArrayList<>();
+        String searchTermLowerCase = searchTerm.toLowerCase();
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) == lowPrice
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice &&
+                        (event.getName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                                || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getZipCode().equals(searchTermLowerCase)
+                                || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                                || event.getState().toLowerCase().equals(searchTermLowerCase))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+
+        } else {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        }
+        return matchingEvents;
+    }
+
+    @PostMapping({"/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/{highPrice}",
+                    "/searchByKeywordFamFriendlyPrice/{searchTerm}/{famFriendly}/{lowPrice}/"})
+    public List<Event> searchByKeywordAndDatePriceAndFamFriendly(@RequestBody HashMap<String, Number> date,
+                                                                 @PathVariable("famFriendly") boolean famFriendly,
+                                                                 @PathVariable("searchTerm") String searchTerm,
+                                                                 @PathVariable("lowPrice") Integer lowPrice,
+                                                                 @PathVariable(required = false) Integer highPrice){
+
+        Iterable<Event> dateEvents = this.eventRepository.findByDate(date);
+        List<Event> matchingEvents = new ArrayList<>();
+        String searchTermLowerCase = searchTerm.toLowerCase();
+        if (highPrice == null && lowPrice == 0) {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) == lowPrice
+                        && event.isFamilyFriendly() == famFriendly
+                        && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                        || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                        || event.getZipCode().equals(searchTermLowerCase)
+                        || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                        || event.getState().toLowerCase().equals(searchTermLowerCase))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+        } else if (highPrice == null && lowPrice == 100) {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice
+                        && event.isFamilyFriendly() == famFriendly
+                         && (event.getName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getDescription().toLowerCase().contains(searchTermLowerCase)
+                                || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
+                                || event.getZipCode().equals(searchTermLowerCase)
+                                || event.getCity().toLowerCase().equals(searchTermLowerCase)
+                                || event.getState().toLowerCase().equals(searchTermLowerCase))
+                ) {
+                    matchingEvents.add(event);
+                }
+            }
+
+        } else {
+            for (Event event : dateEvents) {
+                if (parseDouble(event.getEntryCost()) > lowPrice && parseDouble(event.getEntryCost()) < highPrice
+                        && event.isFamilyFriendly() == famFriendly
                         && (event.getName().toLowerCase().contains(searchTermLowerCase)
                         || event.getDescription().toLowerCase().contains(searchTermLowerCase)
                         || event.getLocationName().toLowerCase().contains(searchTermLowerCase)
