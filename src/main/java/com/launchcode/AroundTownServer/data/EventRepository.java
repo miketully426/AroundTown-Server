@@ -4,6 +4,7 @@ import com.launchcode.AroundTownServer.models.Event;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -20,4 +21,9 @@ public interface EventRepository extends CrudRepository<Event, Integer> {
     public List<Event> findByEntryCost(String price);
 
     public List<Event> findByEntryCostGreaterThan(String price);
+
+    public List<Event> findByDate(HashMap<String, Number> date);
+
+    public List<Event> findByFamilyFriendlyAndDate(boolean familyFriendly, HashMap<String, Number> date);
+
 }
